@@ -1,21 +1,19 @@
 ---
-import PlotFigure from "../components/PlotFigure.astro";
 import Layout from "../layouts/Layout.astro";
-import * as Plot from "@observablehq/plot";
-import penguins from "../assets/penguins.json";
+import Menu from "../components/Menu.astro";
 ---
 
 <Layout>
-  <h1 class="text-2xl">Test Astro et Plot (Observablehq)</h1>
-  <PlotFigure
-    options={{
-      marks: [
-        Plot.dot(penguins, {
-          x: "culmen_length_mm",
-          y: "culmen_depth_mm",
-          stroke: "species",
-        }),
-      ],
-    }}
-  />
+  <div class="container mx-auto p-8">
+    <Menu currentPage="index" />
+    
+    <div class="text-center">
+      <h1 class="text-4xl font-bold text-primary mb-4">
+        TP4 - Observable Plot
+      </h1>
+      <p class="text-lg text-base-content mb-8">
+        Navigation entre les exercices de graphiques
+      </p>
+    </div>
+  </div>
 </Layout>

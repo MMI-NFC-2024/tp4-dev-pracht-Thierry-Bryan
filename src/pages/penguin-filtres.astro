@@ -1,0 +1,103 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Menu from "../components/Menu.astro";
+---
+
+<Layout>
+  <div class="container mx-auto p-8">
+    <Menu currentPage="penguin-filtres" />
+    
+    <h1 class="text-2xl font-bold mb-4 text-center">Manchots avec filtres multiples</h1>
+    
+    <div class="mb-6 flex flex-wrap gap-4 justify-center">
+      <div>
+        <label for="species" class="mr-2 font-medium">Espèce :</label>
+        <select name="species" id="species" class="select select-bordered">
+          <option value="">Toutes les espèces</option>
+          <option value="Adelie">Adelie</option>
+          <option value="Chinstrap">Chinstrap</option>
+          <option value="Gentoo">Gentoo</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="island" class="mr-2 font-medium">Île :</label>
+        <select name="island" id="island" class="select select-bordered">
+          <option value="">Toutes les îles</option>
+          <option value="Biscoe">Biscoe</option>
+          <option value="Dream">Dream</option>
+          <option value="Torgersen">Torgersen</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="sex" class="mr-2 font-medium">Sexe :</label>
+        <select name="sex" id="sex" class="select select-bordered">
+          <option value="">Tous</option>
+          <option value="MALE">Mâle</option>
+          <option value="FEMALE">Femelle</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="myplot" class="flex justify-center"></div>
+
+    <script>
+      import * as Plot from "@observablehq/plot";
+      import penguins from "../assets/penguins.json";
+
+      // Récupère tous les éléments select
+      const selectSpecies = document.getElementById("species") as HTMLSelectElement;
+      const selectIsland = document.getElementById("island") as HTMLSelectElement;
+      const selectSex = document.getElementById("sex") as HTMLSelectElement;
+
+      function renderPlot() {
+        if (!selectSpecies || !selectIsland || !selectSex) return;
+        
+        // Récupère les valeurs sélectionnées
+        const species = selectSpecies.value;
+        const island = selectIsland.value;
+        const sex = selectSex.value;
+
+        // Filtre les données selon tous les critères
+        let filteredPenguins = penguins;
+        
+        if (species) {
+          filteredPenguins = filteredPenguins.filter(p => p.species === species);
+        }
+        if (island) {
+          filteredPenguins = filteredPenguins.filter(p => p.island === island);
+        }
+        if (sex) {
+          filteredPenguins = filteredPenguins.filter(p => p.sex === sex);
+        }
+
+        // Vide et recrée le graphique
+        const div = document.getElementById("myplot");
+        if (div) div.innerHTML = "";
+        
+        const plot = Plot.plot({
+          marks: [
+            Plot.dot(filteredPenguins, {
+              x: "culmen_length_mm",
+              y: "culmen_depth_mm",
+              stroke: "species",
+              title: d => `${d.species} - ${d.island} - ${d.sex}`,
+            }),
+          ],
+          caption: `${filteredPenguins.length} manchots affichés`,
+        });
+        
+        if (div) div.append(plot);
+      }
+
+      // Ajoute les écouteurs d'événements
+      if (selectSpecies) selectSpecies.addEventListener("change", renderPlot);
+      if (selectIsland) selectIsland.addEventListener("change", renderPlot);
+      if (selectSex) selectSex.addEventListener("change", renderPlot);
+
+      // Affiche le graphique au chargement
+      renderPlot();
+    </script>
+  </div>
+</Layout>

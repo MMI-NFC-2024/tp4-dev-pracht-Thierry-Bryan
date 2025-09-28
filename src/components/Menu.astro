@@ -1,0 +1,55 @@
+---
+// Propriété pour définir la page active (optionnel)
+export interface Props {
+  currentPage?: string;
+}
+
+const { currentPage } = Astro.props;
+---
+
+<nav class="mb-8">
+  <div class="flex justify-center">
+    <ul class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
+      <li>
+        <a
+          href="/"
+          class={`text-lg ${currentPage === "index" ? "active" : ""}`}
+        >
+          Accueil
+        </a>
+      </li>
+      <li>
+        <a
+          href="/simple"
+          class={`text-lg ${currentPage === "simple" ? "active" : ""}`}
+        >
+          Simple
+        </a>
+      </li>
+      <li>
+        <a
+          href="/simple-penguin"
+          class={`text-lg ${currentPage === "simple-penguin" ? "active" : ""}`}
+        >
+          Simple Penguin
+        </a>
+      </li>
+      <li>
+        <a
+          href="/penguin-filtre"
+          class={`text-lg ${currentPage === "penguin-filtre" ? "active" : ""}`}
+        >
+          Penguin Filtre
+        </a>
+      </li>
+      <li>
+        <a
+          href="/penguin-filtres"
+          class={`text-lg ${currentPage === "penguin-filtres" ? "active" : ""}`}
+        >
+          Filtres Multiples
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
