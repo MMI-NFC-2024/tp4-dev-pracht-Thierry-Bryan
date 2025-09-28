@@ -1,0 +1,67 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <h1 class="text-2xl font-bold mb-4 p-4">Manchots avec filtre d'espèce</h1>
+
+  <div class="p-4">
+    <label for="species" class="mr-2 font-medium">Filtrer par espèce :</label>
+    <select name="species" id="species" class="border p-1 rounded">
+      <option value="">All species</option>
+      <option value="Adelie">Adelie</option>
+      <option value="Chinstrap">Chinstrap</option>
+      <option value="Gentoo">Gentoo</option>
+    </select>
+  </div>
+
+  <div id="myplot" class="p-4"></div>
+
+  <script>
+    import * as Plot from "@observablehq/plot";
+    import penguins from "../assets/penguins.json";
+
+    // Récupère l'élément select pour choisir l'espèce
+    const selectSpecies = document.getElementById("species");
+
+    function renderPlot() {
+      // Récupère l'espèce sélectionnée
+      const species = selectSpecies.value;
+
+      // Sélectionne la div où le graphique sera affiché
+      const div = document.getElementById("myplot");
+
+      // Vide le contenu précédent de la div
+      div.innerHTML = "";
+
+      // Filtre les données selon l'espèce sélectionnée
+      const filteredPenguins = species
+        ? penguins.filter((p) => p.species === species)
+        : penguins;
+
+      // Crée le graphique avec Plot
+      const plot = Plot.plot({
+        marks: [
+          // Ajoute les points du graphique, filtrés selon l'espèce choisie
+          Plot.dot(filteredPenguins, {
+            x: "culmen_length_mm", // Axe X : longueur du bec
+            y: "culmen_depth_mm", // Axe Y : profondeur du bec
+            stroke: "species", // Couleur selon l'espèce
+          }),
+        ],
+      });
+      // Ajoute le graphique à la div
+      div.append(plot);
+    }
+
+    // Ajoute un écouteur d'événement pour le changement d'espèce (appel 'renderPlot')
+    selectSpecies.addEventListener("change", renderPlot);
+
+    // Affiche le graphique au chargement de la page
+    renderPlot();
+  </script>
+
+  <div class="mt-4 p-4">
+    <a href="/" class="hover:underline">← Retour à l'accueil</a>
+  </div>
+</Layout>
