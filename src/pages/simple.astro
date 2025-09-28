@@ -3,10 +3,11 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-  <h1>Graphique simple</h1>
-  <div id="myplot"></div>
-  <script type="module">
-    import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm";
+  <h1 class="text-2xl font-bold mb-4 p-4">Graphique simple</h1>
+  <div id="myplot" class="p-4"></div>
+
+  <script>
+    import * as Plot from "@observablehq/plot";
 
     const plot = Plot.rectY(
       { length: 10000 },
@@ -15,4 +16,8 @@ import Layout from "../layouts/Layout.astro";
     const div = document.querySelector("#myplot");
     div.append(plot);
   </script>
+
+  <div class="mt-4 p-4">
+    <a href="/" class=" hover:underline">← Retour à l'accueil</a>
+  </div>
 </Layout>
